@@ -1,3 +1,5 @@
+setwd("C:/Users/CCSLAB1/Desktop/Exploratoy-Analysis")
+
 #Read the data
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
@@ -50,10 +52,26 @@ print(ggp)
 png(filename='plot3.png')
 print(ggp)
 
-#4. Across the United States, how have emissions from coal combustion-related sources changed from 1999–2008?
+#4. Across the United States, how have emissions from coal combustion-related sources changed from 1999 to 2008?
+#http://stat545.com/block022_regular-expression.html
+#4-1. Find fuel comb at EI. sector
+is.combustion.coal <- grepl("Fuel Comb.*Coal", SCC$EI.Sector)
+coal.source <- SCC[is.combustion.coal,1]
+source.matching.subset <- NEI[NEI$SCC %in% coal.source,]
+
+#4-2. plot
+library(ggplot2)
+ggp <- ggplot(source.matching.subset, aes(factor(year), Emissions)) +
+  geom_bar(stat="identity")
+print(ggp)
 
 
-#5 How have emissions from motor vehicle sources changed from 1999–2008 in Baltimore City?
-Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (
+#5 How have emissions from motor vehicle sources changed from 1999 to 2008 in Baltimore City?
+is.motor <- grepl("", SCC$EI.Sector)
+bol_motor_NEI<-NEI[NEI$fips=='24510' & ,]
+
+
+
+#6Compare emissions from motor vehicle sources in Baltimore City with emissions from motor vehicle sources in Los Angeles County, California (
 fips == "06037"
 ). Which city has seen greater changes over time in motor vehicle emissions?
